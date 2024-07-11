@@ -1,4 +1,4 @@
-use egui_plot::{Line, Plot};
+use egui_plot::{Legend, Line, Plot};
 
 #[derive(Default)]
 pub struct TemplateApp {}
@@ -28,11 +28,13 @@ impl eframe::App for TemplateApp {
                 .map(|([x, fibo], [_, fahr])| [*x, *fahr - *fibo])
                 .collect();
 
-            Plot::new("temp").view_aspect(2.0).show(ui, |plot_ui| {
-                plot_ui.line(Line::new(fahr).name("Celsius to Fahrenheit"));
-                plot_ui.line(Line::new(fibo).name("Fibonacci"));
-                plot_ui.line(Line::new(diff).name("Fahr - Fibo"));
-            });
+            Plot::new("temp")
+                .legend(Legend::default())
+                .show(ui, |plot_ui| {
+                    plot_ui.line(Line::new(fahr).name("Celsius to Fahrenheit"));
+                    plot_ui.line(Line::new(fibo).name("Fibonacci"));
+                    plot_ui.line(Line::new(diff).name("Fahr - Fibo"));
+                });
         });
     }
 }
