@@ -1,4 +1,4 @@
-use egui_plot::{Line, Plot, PlotPoints};
+use egui_plot::{Line, Plot};
 
 #[derive(Default)]
 pub struct TemplateApp {}
@@ -14,22 +14,24 @@ impl eframe::App for TemplateApp {
     /// Called each time the UI needs repainting, which may be many times per second.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            let range: Vec<_> = (-100..500)
-                .map(|n| n as f64)
-                .flat_map(|n| [n, n + 0.25, n + 0.5, n + 0.75])
-                .collect();
-            let fahr: PlotPoints = range
-                .iter()
-                .map(|&temp| [temp, celsuis_to_fahr(temp)])
-                .collect();
-
-            let fibo: PlotPoints = fibo()
-                .take_while(|(_a, b)| *b < 400.)
+            let fibo: Vec<_> = fibo()
+                .take_while(|(_a, b)| *b < 1000.)
                 .map(|(a, b)| [a, b])
                 .collect();
+            let fahr: Vec<_> = fibo
+                .iter()
+                .map(|[celsius, _]| [*celsius, celsuis_to_fahr(*celsius)])
+                .collect();
+            let diff: Vec<_> = fibo
+                .iter()
+                .zip(fahr.iter())
+                .map(|([x, fibo], [_, fahr])| [*x, *fahr - *fibo])
+                .collect();
+
             Plot::new("temp").view_aspect(2.0).show(ui, |plot_ui| {
-                plot_ui.line(Line::new(fahr));
-                plot_ui.line(Line::new(fibo));
+                plot_ui.line(Line::new(fahr).name("Celsius to Fahrenheit"));
+                plot_ui.line(Line::new(fibo).name("Fibonacci"));
+                plot_ui.line(Line::new(diff).name("Fahr - Fibo"));
             });
         });
     }
