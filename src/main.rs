@@ -20,7 +20,11 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "eframe template",
         native_options,
-        Box::new(|cc| Ok(Box::new(fahrenheit_to_celsuis_through_fibo::TemplateApp::new(cc)))),
+        Box::new(|cc| {
+            Ok(Box::new(
+                fahrenheit_to_celsuis_through_fibo::TemplateApp::new(cc),
+            ))
+        }),
     )
 }
 
@@ -37,7 +41,11 @@ fn main() {
             .start(
                 "the_canvas_id",
                 web_options,
-                Box::new(|cc| Ok(Box::new(fahrenheit_to_celsuis_through_fibo::TemplateApp::new(cc)))),
+                Box::new(|cc| {
+                    Ok(Box::new(
+                        fahrenheit_to_celsuis_through_fibo::TemplateApp::new(cc),
+                    ))
+                }),
             )
             .await;
 
